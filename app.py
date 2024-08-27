@@ -2,10 +2,8 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import numpy as np
-import pandas as pd
 import pickle
 import uvicorn
-from pydantic import BaseModel
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
@@ -38,9 +36,9 @@ def predict(request: Request,
             thal: int = Form(...)):
     data = [age,sex,cp,trestbps,chol,fbs,restecg,thalach,exang,oldpeak,slope,ca,thal]   
     data = np.array(data).reshape(1, -1)
-    scaled_data = scaling.transform(data) #pd.DataFrame(scaling.transform(data), columns = data.columns)
+    scaled_data = scaling.transform(data) 
     prediction = knn_model.predict(scaled_data)
-    return templates.TemplateResponse("home.html", {"request": request, "prediction_text": f"The diabete progression is {prediction}"})
+    return templates.TemplateResponse("home.html", {"request": request, "prediction_text": f"The heart disease is {prediction}"})
 
 
 if __name__ == "__main__":
